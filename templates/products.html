@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_field %}
+
+{% block title %}Products{{super()}}{% endblock %}
+
+{% block body %}
+    <div class="product_sorters">
+    <form class="sorting_form" id="sorting_form" method="POST" action="">
+        {{ sorting_form.hidden_tag() }}
+        <div class="form-content">
+            {% for field in sorting_form %}
+                {{ field(placeholder=field.label.text, class="field", id=field.label.text, onchange="submitSortingForm()") }}
+            {% endfor %}
+        </div>
+    </form>
+    </div>
+
+    <div class="container ">
+        <div class="products">
+            <div class="row">
+                {% for product in products %}
+                <div class="card product col-md-3 col-12" style="width: 18rem;">
+                    <img class="card-img-top" src="{{ product.product_image_path }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.product_name }}</h5>
+                        <p class="card-text">{{ product.product_description }}</p>
+                        <p><strong>Price: </strong>£{{ product.product_price }}</p>
+                        <strong>Stock: </strong>
+                            {% if product.product_category == "tshirt" %}
+                                <div id="small_stock">{{ product.small_stock }}</div>
+                                <div id="medium_stock">{{ product.medium_stock }}</div>
+                                <div id="large_stock">{{ product.large_stock }}</div>
+                            {% else %}
+                                {{ product.one_size_stock }}
+                            {% endif %}<br><br>
+                        <form action="{{ url_for('add_to_order', product_id=product.id, product_category=product.product_category) }}" method="POST">
+                            {% if product.product_category == "tshirt" %}
+                                <strong>Size: </strong>
+                                <select title="size" name="size" onchange="change_stock(this)">
+                                    {% if product.small_stock > 0 %}
+                                        <option value="small">Small</option>
+                                    {% endif %}
+                                    {% if product.medium_stock > 0 %}
+                                        <option value="medium">Medium</option>
+                                    {% endif %}
+                                    {% if product.large_stock > 0 %}
+                                        <option value="large">Large</option>
+                                    {% endif %}
+                                </select><br><br>
+                            {% endif %}
+                            <strong>Quantity: </strong><input title="quantity" class="quantity" type="text" name="quantity" required><br><br>
+                            {% if current_user.user_role != "customer" %}
+                                <div class="spacer"></div>
+                            {% endif %}
+                            <div class = "product_btngroup">
+                                <button type="submit" class="btn add_to_basket">Add to basket</button>
+                                {% if current_user.user_role != "customer" and current_user.is_authenticated %}
+                                    <!--<a href="#"><button type="button" class="btn alter_product">Edit</button></a>-->
+                                    <a href="{{ url_for('remove_product', product_id = product.id) }}"><button type="button" class="btn remove_product">Remove</button></a>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

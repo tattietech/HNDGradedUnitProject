@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_field %}
+{% block html %}<html class="home" lang="en">{% endblock %}
+{% block title %}Reports{{ super() }}{% endblock %}
+{% block body %}
+    <script>
+        window.onload = function() {
+            document.getElementById("User").checked = true;
+            reportsForm('user')
+        };
+    </script>
+    {{ super() }}
+    <div class="reports_form">
+    <form class="forms create_product col-md-3" method="POST" enctype="multipart/form-data" action="">
+        {{ form.hidden_tag() }}
+        <div class="form-content">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                {% for field in form.report_type %}
+                    {% if field.label.text == "User" %}
+                        <label class="btn report-toggles btn-secondary active" onclick="reportsForm('user')">
+                            {{ field(placeholder=field.label.text, class="field", id=field.label.text) }}{{ field.label }}
+                        </label>
+                    {% elif field.label.text == "Order" %}
+                        <label class="btn report-toggles btn-secondary" onclick="reportsForm('order')">
+                            {{ field(placeholder=field.label.text, class="field", id=field.label.text) }}{{ field.label }}
+                        </label>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <h5 id="users">Download a report of users created</h5>
+            <h5 id="orders">Download a report of orders placed</h5>
+            <br><br>
+            <label class="report_label">Between:</label>
+            {{ form.start_date(class="field report_date", id=form.start_date.label.text) }}<br>
+            <label class="report_label">And:</label>
+            {{ form.end_date(class="field report_date", id=form.end_date.label.text) }}
+            <button type="submit" class="submit">Generate Report</button>
+        </div>
+    </form>
+    </div>
+{% endblock %}

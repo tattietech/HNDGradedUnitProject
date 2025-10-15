@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_field %}
+{% block html %}<html class="home" lang="en">{% endblock %}
+{% block title %}Add Product{{ super() }}{% endblock %}
+{% block body %}
+    <script>
+        window.onload = function() {
+            document.getElementById("T-Shirt").checked = true;
+            tshirt();
+        };
+    </script>
+    {{ super() }}
+    <!--to do: check t-shirt and remove no_size on page load-->
+    <form class="forms create_product col-md-3" method="POST" enctype="multipart/form-data" action="{{ url_for('create_product') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-content">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                {% for field in form.product_category %}
+                    {% if field.label.text == "T-Shirt" %}
+                        <label class="btn toggles btn-secondary active" onclick="tshirt()">
+                            {{ field(placeholder=field.label.text, class="field", id=field.label.text) }}{{ field.label }}
+                        </label>
+                    {% else %}
+                        <label class="btn toggles btn-secondary" onclick="other()">
+                            {{ field(placeholder=field.label.text, class="field", id=field.label.text) }}{{ field.label }}
+                        </label>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% for field in form %}
+                {% if field.type != "RadioField" %}
+                    {{ render_field(field) }}
+                {% endif %}
+            {% endfor %}
+            <label class="image_upload">Choose image to upload:</label>
+            <input class="image_upload" type="file" name="image">
+            <button type="submit" class="submit">Create Product</button>
+        </div>
+    </form>
+{% endblock %}

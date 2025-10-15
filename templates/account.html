@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% block title %}{{ current_user.first_name }} {{ current_user.last_name }}{{ super() }}{% endblock %}
+
+{% block body %}
+    <div class="container account">
+        <div class="col-md-6 mx-auto">
+        <a href="{{ url_for('login_details', user_id = current_user.id) }}">
+            <div class="card account_item_top">
+                <img class="card-img-top" src="/static/img/security.png" alt="Card image cap">
+                <div class="card-body">
+                    <strong>Login and security</strong>
+                    <p class="card-text">Change email address, password, and name</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ url_for('addresses', user_id = current_user.id) }}">
+            <div class="card account_item_top">
+                <img class="card-img-top" src="/static/img/address.png" alt="Card image cap">
+                <div class="card-body">
+                    <strong>Your Addresses</strong>
+                    <p class="card-text">Add, remove, and edit delivery addresses</p>
+                </div>
+            </div><br>
+        </a>
+
+        <a href="{{ url_for('orders', user_id = current_user.id) }}">
+            <div class="card account_item_bottom">
+                <img class="card-img-top" src="/static/img/orders.png" alt="Card image cap">
+                <div class="card-body">
+                    <strong>Orders</strong>
+                    <p class="card-text">View your past orders, and track your current ones</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="#">
+            <div class="card account_item_bottom">
+                <img class="card-img-top" src="/static/img/payment.png" alt="Card image cap">
+                <div class="card-body">
+                    <strong>Payment Options</strong>
+                    <p class="card-text">Add, remove, and edit payment options</p>
+                </div>
+            </div>
+        </a>
+
+        </div>
+    </div>
+{% endblock %}

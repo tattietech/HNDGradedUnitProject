@@ -1,0 +1,202 @@
+{% extends 'layout.html' %}
+{% block title %}Orders {{ super() }}{% endblock %}
+
+{% block body %}
+    {% if not current_orders and not complete_orders and not cancelled_orders %}
+        <div class="empty_basket">
+            <h2 class="page_heading">Hi {{ current_user.first_name }}, you haven't made any orders :(</h2>
+            <a href="{{ url_for('products') }}">Return to products</a>
+        </div>
+    {% else %}
+    <div class="container orders">
+        <div class="current_orders">
+            {% if current_orders %}
+                <h3 class="table_headings">Current Orders</h3>
+            {% endif %}
+            {% for order in current_orders %}
+                <table class="orders_tables">
+                    <tr class="order_top_row">
+                        <td class="top_row_first_cell">
+                            {% set status = order.order_status|title %}
+                            <h6>
+                                Order Placed: {{ order.order_placed_on.strftime('%d/%m/%Y') }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                {% if order.order_status == "placed" %}
+                                    {% set status = "Awaiting Dispatch" %}
+                                {% else %}
+                                    {% set status = order.order_status|title %}
+                                {% endif %}
+                                Status: {{ status }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                Total: £{{ order.order_total + order.shipping.cost }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                Order No: #{{ order.id }}
+                            </h6>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('view_order_details', order_id=order.id) }}">View Details</a>
+                            {% if order.order_status == "placed" %}<br>
+                                <a href="{{ url_for('cancel_order', order_id=order.id) }}">Cancel Order</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% for item in order.order_lines %}
+                        <tbody class="order_item">
+                        <tr>
+                            <td>
+                                <strong>{{ item.product.product_name }}</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ item.product.product_description }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="/{{ item.product.product_image_path }}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            {% endfor %}
+
+            {% if complete_orders %}
+                <h3 class="table_headings complete_order_heading">Completed Orders</h3>
+            {% endif %}
+            {% for order in complete_orders %}
+                <table class="orders_tables">
+                    <tr class="order_top_row">
+                        <td class="top_row_first_cell">
+                            {% set status = order.order_status|title %}
+                            <h6>
+                                Order Placed: {{ order.order_placed_on.strftime('%d/%m/%Y') }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                {% if order.order_status == "placed" %}
+                                    {% set status = "Awaiting Dispatch" %}
+                                {% else %}
+                                    {% set status = order.order_status|title %}
+                                {% endif %}
+                                Status: {{ status }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                Total: £{{ order.order_total + order.shipping.cost }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                Order No: #{{ order.id }}
+                            </h6>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('view_order_details', order_id=order.id) }}">View Details</a>
+                        </td>
+                    </tr>
+                    {% for item in order.order_lines %}
+                        <tbody class="order_item">
+                        <tr>
+                            <td>
+                                <strong>{{ item.product.product_name }}</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ item.product.product_description }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="/{{ item.product.product_image_path }}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            {% endfor %}
+
+            {% if cancelled_orders %}
+                <h3 class="table_headings complete_order_heading">Cancelled Orders</h3>
+            {% endif %}
+            {% for order in cancelled_orders %}
+                <table class="orders_tables">
+                    <tr class="order_top_row">
+                        <td class="top_row_first_cell">
+                        <td class="top_row_first_cell">
+                            {% set status = order.order_status|title %}
+                            <h6>
+                                Cancelled On: {{ order.order_cancelled_on.strftime('%d/%m/%Y') }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                {% set status = order.order_status|title %}
+                                Status: {{ status }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                Total: £{{ order.order_total + order.shipping.cost }}
+                            </h6>
+                        </td>
+                        <td>
+                            <h6>
+                                Order No: #{{ order.id }}
+                            </h6>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('view_order_details', order_id=order.id) }}">View Details</a><br>
+                            <a href="{{ url_for('continue_order', order_id = order.id) }}">Re-Place Order</a>
+                        </td>
+                    </tr>
+                    {% for item in order.order_lines %}
+                        <tbody class="order_item">
+                        <tr>
+                            <td>
+                                <strong>{{ item.product.product_name }}</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ item.product.product_description }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="/{{ item.product.product_image_path }}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

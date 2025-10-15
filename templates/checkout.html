@@ -1,0 +1,155 @@
+{% extends 'layout.html' %}
+{% block title %}Checkout
+    {{ super() }}{% endblock %}
+{% block body %}
+    <div class="container checkout">
+        <div class="row justify-content-between">
+            <div class="delivery_address col-md-6">
+            <h3 class="table_headings">Delivery Address</h3>
+            <table class="checkout_tables">
+                <tr>
+                    <td>
+                        {{ default_address.address_line_1 }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('addresses', user_id=current_user.id) }}">Change Address</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ default_address.address_line_2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ default_address.town }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ default_address.city }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ default_address.postcode }}
+                    </td>
+                </tr>
+            </table>
+            </div>
+
+        <div class="purchase col-md-4">
+            <h3 class="table_headings">Purchase Information</h3>
+            <table class="checkout_tables">
+                    <tr>
+                        <td class="first_column">
+                            Delivery Cost
+                        </td>
+                        <td id="delivery_cost" class="second_column">
+                            £{{ current_order.shipping.cost }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="first_column">
+                            Item Cost
+                        </td>
+                        <td id="delivery_cost" class="second_column">
+                            £{{ current_order.order_total }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="first_column">
+                            Total Cost
+                        </td>
+                        <td id = "total_cost" class="second_column">
+                            £{{ current_order.order_total + current_order.shipping.cost }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                        </td>
+                    </tr>
+            </table>
+            <form action="{{ url_for('pay') }}" method="POST">
+                {% set total = current_order.order_total + current_order.shipping.cost %}
+                {% set total = total * 100 %}
+                <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-name="Native Sins"
+                    data-image="/static/img/checkout_icon.png"
+                    data-key="{{ stripe_pub_key }}"
+                    data-amount="{{ total }}"
+                    data-email="{{ current_user.email_address }}"
+                    data-locale="auto"
+                    data-currency="gbp">
+                </script>
+            </form>
+        </div>
+
+    </div>
+
+        <div class="row justify-content-between">
+            <div class="order_summary col-md-6">
+            <h3 class="table_headings">Order Summary</h3>
+                {% for item in current_order.order_lines %}
+                    <table class="checkout_tables">
+                        <tr>
+                            <td>
+                                <strong>{{ item.product.product_name }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Price: £{{ item.product.product_price }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Quantity: {{ item.quantity }}
+                            </td>
+                        </tr>
+                    </table>
+                {% endfor %}
+            </div>
+
+            <div class="shipping col-md-4">
+            <h3 class="table_headings">Shipping Options</h3>
+            <form id="shipping_form" action="{{ url_for('change_shipping') }}" method="POST">
+                <table class="checkout_tables">
+                    <tr>
+                        <td class="first_column">
+                            First Class
+                        </td>
+                        <td class="second_column">
+                            <input
+                            title="shipping" class="shipping_radio" id="first" type="radio" name="shipping" value="1"
+                            onchange="submitShippingForm()"
+                            {% if current_order.shipping.id == 1 %}
+                                checked
+                            {% endif %}
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="first_column">
+                            Second Class
+                        </td>
+                        <td class="second_column">
+                            <input
+                                title="shipping" class="shipping_radio" type="radio" name="shipping" value="2"
+                                onchange="submitShippingForm()"
+                                {% if current_order.shipping.id == 2 %}
+                                    checked
+                                {% endif %}
+                            >
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        </div>
+    </div>
+
+{% endblock %}

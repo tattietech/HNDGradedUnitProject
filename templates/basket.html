@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block title %}Basket{{super()}}{% endblock %}
+
+{% block body %}
+    {% if current_basket == None or current_order.order_lines.count() == 0 %}
+        <div class="empty_basket">
+            <h2 class="page_heading">Hi {{ current_user.first_name }}, your basket is currently empty! :(</h2>
+            <a href="{{ url_for('products') }}">Return to products</a>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="basket">
+                {% for item in current_order.order_lines %}
+                    <div class="row">
+                    <table class="basket_item col-10 mx-auto">
+                        <tr>
+                            <td class="name">
+                                <h3>{{ item.product.product_name }}</h3>
+                            </td>
+                            <td class="price">
+                                £{{ item.product.product_price * item.quantity}}
+                            </td>
+                            <td class="quantity">
+                                <form id="{{ item.id }}" class="edit_quantity_input" action="{{ url_for('edit_quantity', line_id = item.id) }}" method="POST">
+                                  Quantity:
+                                    {% if item.size == "small" %}
+                                        <input title = "quantity" name="quantity" type="number" min="1" max="{{ item.product.small_stock + item.quantity }}" step="1" value="{{ item.quantity }}" onchange="submitQuantityForm({{ item.id }})">
+                                    {% elif item.size == "medium" %}
+                                        <input title = "quantity" name="quantity" type="number" min="1" max="{{ item.product.medium_stock + item.quantity }}" step="1" value="{{ item.quantity }}" onchange="submitQuantityForm({{ item.id }})">
+                                    {% elif item.size == "large" %}
+                                        <input title = "quantity" name="quantity" type="number" min="1" max="{{ item.product.large_stock + item.quantity }}" step="1" value="{{ item.quantity }}" onchange="submitQuantityForm({{ item.id }})">
+                                    {% else %}
+                                        <input title = "quantity" name="quantity" type="number" min="1" max="{{ item.product.one_size_stock + item.quantity }}" step="1" value="{{ item.quantity }}" onchange="submitQuantityForm({{ item.id }})">
+                                    {% endif %}
+                                </form>
+                            </td>
+                            <td class="remove">
+                                <a href="{{ url_for('remove_from_basket',
+                                line_id=item.id, quantity=item.quantity) }}">Remove Item</a>
+                            </td>
+                        </tr>
+                        {% if item.product.product_category == "tshirt" %}
+                            <tr>
+                                <td class="size">
+                                 {{ item.size|title }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td class="description">
+                                {{ item.product.product_description }}
+                            </td>
+                        </tr>
+                    <tr>
+                        <td>
+                            <img src="/{{ item.product.product_image_path }}">
+                        </td>
+                    </tr>
+                    </table>
+                    </div>
+                {% endfor %}
+                <div class="total_wrapper col-md-10 mx-auto">
+                    <div class="row">
+                        <h3 class="order_total col-10 mx-auto">Total: £{{ current_order.order_total }}</h3>
+                    </div>
+                    <div class="row">
+                        <div class="complete_order col-10 mx-auto">
+                            <a href="{{ url_for('checkout') }}"><button type="button" class="btn complete_order_btn">Proceed to Checkout</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

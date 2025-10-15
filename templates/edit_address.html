@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_field %}
+{% block html %}<html class="home" lang="en">{% endblock %}
+{% block title %}Add Address{{ super() }}{% endblock %}
+{% block body %}
+    {{ super() }}
+    <form class="forms create_user col-md-3" method="POST" action="">
+    {{ form.hidden_tag() }}
+        <div class="form-content">
+            {% for field in form %}
+                {{ field(placeholder=field.label.text, class="field", id=field.label.text, value=address_items[loop.index0]) }}
+            {% endfor %}
+            <button type="submit" class="submit">Save</button>
+            <a href="{{ url_for('addresses', user_id=current_user.id) }}">
+                <button type="button" class="cancel">Cancel</button>
+            </a>
+        </div>
+    </form>
+{% endblock %}

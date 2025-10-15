@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .order_confirmation {width: 65%; display: block; margin: 0 auto}
+        .name {width: 25%}
+        .name, .description, .quantity, .price {border-top: none !important;}
+        .total {padding: 0;}
+        .description { width: 30%}
+        img {width: 70%; display: block; margin: 0 auto;}
+        h1, h2, h3 {color: #303030}
+        table {border-collapse: collapse; color: #303030}
+        td {padding: 20px; border-top: 1px solid #303030}
+        a {text-decoration: none; transition: .2s all; color: cornflowerblue}
+        a:hover {color: #4173ce}
+    </style>
+
+</head>
+<body>
+    <div class="order_confirmation">
+    <img src="http://nativesins.com/images/logo.png">
+        <h1>Hi {{ current_user.first_name }},</h1>
+        <h3>Thank you for your order</h3>
+        <br>
+        <h2>Order Summary:</h2>
+        <table>
+            <tr>
+                <td class="name">
+                    <h3>Name</h3>
+                </td>
+                <td class="description">
+                    <h3>Description</h3>
+                </td>
+                <td class="quantity">
+                    <h3>Quantity</h3>
+                </td>
+                <td class="price">
+                    <h3>Price</h3>
+                </td>
+            </tr>
+            {% for line in g.current_order.order_lines %}
+                <tr>
+                    <td>
+                        {{ line.product.product_name }}
+                    </td>
+                    <td>
+                        {{ line.product.product_description }}
+                    </td>
+                    <td>
+                        {{ line.quantity }}
+                    </td>
+                    <td>
+                       £{{ line.product.product_price }}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td><a href="http://localhost:5000/orders/{{ current_user.id }}">Track your order</a></td>
+                <td class="total">
+                    <h2>Total: £{{ g.current_order.order_total }}</h2>
+                </td>
+            </tr>
+        </table>
+    <h4>Kind Regards,</h4>
+    <h4>The Native Sins Team</h4>
+    </div>
+</body>
+</html>

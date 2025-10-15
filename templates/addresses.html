@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block title %}Addresses{{ super() }}{% endblock %}
+
+{% block body %}
+    <div class="container addresses">
+    {% if address_list|length >= 3 %}
+        <div class="row">
+    {% else %}
+        <div class="row">
+    {% endif %}
+
+        <div class="card address_item plus_button col-md-3 col-sm-12">
+            <a href="{{ url_for('add_address') }}">
+                <div class="card-body">
+                    <img  src="/static/img/plus-new.png">
+                    <h6 class="card-subtitle mb-2">Add Address</h6>
+                </div>
+            </a>
+        </div>
+
+    {% for address in address_list %}
+        <div class="card address_item col-md-3 col-sm-12">
+          <div class="card-body">
+            {% if address.default == True %}
+                <h6 class="card-subtitle mb-2 text-muted">Default</h6>
+            {% endif %}
+            <p class="card-text">
+                {{ address.address_line_1 }}<br>
+                {{ address.address_line_2 }}<br>
+                {{ address.town }}<br>
+                {{ address.city }}<br>
+                {{ address.postcode }}
+            </p>
+            {% if address.default == False %}
+                <a href="{{ url_for('set_address_default', address_id = address.id) }}">Set Default</a><br>
+            {% endif %}
+            <a href="{{ url_for('edit_address', address_id = address.id, user_id = current_user.id) }}">Edit </a><br>
+            <a href="{{ url_for('delete_address', address_id = address.id, user_id = current_user.id) }}">Delete</a>
+          </div>
+        </div>
+    {%  endfor %}
+        </div>
+        </div>
+    </div>
+{% endblock %}

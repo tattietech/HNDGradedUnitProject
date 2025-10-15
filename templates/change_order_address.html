@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% block title %}Addresses{{ super() }}{% endblock %}
+
+{% block body %}
+    <div class="container addresses">
+    {% if address_list|length >= 3 %}
+        <div class="row">
+    {% else %}
+        <div class="row">
+    {% endif %}
+
+        <div class="card address_item plus_button col-md-3 col-sm-12">
+            <a href="{{ url_for('change_order_add_address', order_id=order.id) }}">
+                <div class="card-body">
+                    <img  src="/static/img/plus-new.png">
+                    <h6 class="card-subtitle mb-2">Add Address</h6>
+                </div>
+            </a>
+        </div>
+
+    {% for address in address_list %}
+        <div class="card address_item change_order_address_item col-md-3 col-sm-12">
+          <div class="card-body">
+            {% if address.id == order.address.id %}
+                <h6 class="card-subtitle mb-2 text-muted">Currently Selected</h6>
+            {% endif %}
+            <p class="card-text">
+                {{ address.address_line_1 }}<br>
+                {{ address.address_line_2 }}<br>
+                {{ address.town }}<br>
+                {{ address.city }}<br>
+                {{ address.postcode }}
+            </p>
+          </div>
+        {% if address.id != order.address.id %}
+        <a href = '{{ url_for('set_order_address', order_id=order.id, address_id=address.id) }}'><button type="button" class="btn">Deliver to this address</button></a>
+        {% endif %}
+        </div>
+    {%  endfor %}
+        </div>
+        </div>
+    </div>
+{% endblock %}
