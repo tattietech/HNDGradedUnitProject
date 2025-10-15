@@ -4,18 +4,6 @@
 
 A full-featured e-commerce web application built for the band Native Sins as part of an HND Graded Unit project. This application provides a complete online shopping experience with user authentication, product management, shopping cart functionality, and integrated payment processing.
 
-## 📋 Table of Contents
-
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Database Models](#database-models)
-- [Documentation](#documentation)
-- [Author](#author)
-
 ## ✨ Features
 
 ### Customer Features
@@ -121,4 +109,5 @@ View the generated documentation by opening `docs/_build/html/index.html` in you
 - Year: 2018
 
 - Project: HND Graded Unit
+
 
