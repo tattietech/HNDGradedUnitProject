@@ -1,4 +1,4 @@
-# Native Sins E-Commerce Web Application
+# Band Merch E-Commerce Web Application
 
 > **Note**: This is an academic project created while I was studying Software Engineering. The SDK versions and build tools reflect the time of development and are documented as-is for historical accuracy. It is not live nor will it be maintained any further.
 
@@ -119,4 +119,5 @@ View the generated documentation by opening `docs/_build/html/index.html` in you
 
 **Andrew Bruce**
 - Year: 2018
+
 - Project: HND Graded Unit
