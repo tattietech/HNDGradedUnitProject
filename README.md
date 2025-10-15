@@ -1,6 +1,6 @@
 # Band Merch E-Commerce Web Application
 
-> **Note**: This is an academic project created while I was studying Software Engineering. The SDK versions and build tools reflect the time of development and are documented as-is for historical accuracy. It is not live nor will it be maintained any further.
+> :warning: **Note**: This is an academic project created in 2018 while I was studying Software Engineering. The SDK versions and build tools reflect the time of development and are documented as-is for historical accuracy. It is not live nor will it be maintained any further.
 
 A full-featured e-commerce web application built for the band Native Sins as part of an HND Graded Unit project. This application provides a complete online shopping experience with user authentication, product management, shopping cart functionality, and integrated payment processing.
 
@@ -121,3 +121,4 @@ View the generated documentation by opening `docs/_build/html/index.html` in you
 - Year: 2018
 
 - Project: HND Graded Unit
+
